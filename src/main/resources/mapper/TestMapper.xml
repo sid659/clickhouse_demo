@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.click.house.mapper.TestMapper">
+    <resultMap id="BaseResultMap" type="com.click.house.entity.Test">
+        <id column="pointId" jdbcType="INTEGER" property="pointId" />
+        <result column="dataTime" jdbcType="INTEGER" property="dataTime" />
+        <result column="val" jdbcType="FLOAT" property="val" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        pointId,dataTime,val
+    </sql>
+
+    <insert id="save" parameterType="com.click.house.entity.Test" >
+        INSERT INTO test
+        (pointId,dataTime,val)
+        VALUES
+        (#{pointId,jdbcType=INTEGER},#{dataTime,jdbcType=VARCHAR},#{val,jdbcType=FLOAT})
+    </insert>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from test
+        where pointId = #{pointId,jdbcType=INTEGER}
+    </select>
+
+    <select id="select" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from test
+        where dataTime  > 202006100000 and dataTime &lt; 202006200000
+        and pointId  in (1,2,3,4,5,6,7,8,9,10,12,18,60)
+    </select>
+
+    <insert id="batchInsert" >
+        insert into `test`
+        (pointId,dataTime,val)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.pointId}, #{item.dataTime}, #{item.val})
+        </foreach>
+    </insert>
+</mapper>
